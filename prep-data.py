@@ -57,5 +57,5 @@ fig = px.choropleth_mapbox(df,
                                "Cases per 100,000 people"}
                            )
 # %%
-fig.write_html("_includes/nyc-positivity.html")
+fig.write_html("nyc-positivity.html")
 # %%
