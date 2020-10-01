@@ -54,8 +54,10 @@ fig = px.choropleth_mapbox(df,
                            hover_data={
                                "Cases in the past week", 
                                "Tests in the past week",
-                               "Cases per 100,000 people"}
+                               "Cases per 100,000 people"},
+                           width=1000, height=800
                            )
 # %%
-fig.write_html("nyc-positivity.html")
+config = {'displaylogo': False}
+fig.write_html("nyc-positivity.html", config=config)
 # %%
