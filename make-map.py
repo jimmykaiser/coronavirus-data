@@ -29,15 +29,16 @@ df["Cases in the past week"] = df["covid_case_count"] - df["covid_case_count_las
 df["Cases in the past week"] = df["Cases in the past week"].clip(0, None)
 df["Tests in the past week"] = df["total_covid_tests"] - df["total_covid_tests_last_week"]
 df["Positivity Rate (%)"] = ((df["Cases in the past week"] / df["Tests in the past week"]) * 100).round(2)
-df["Cases per 100,000 people"] = ((df["Cases in the past week"] / df["pop_denominator"]) * 100000).round()
+df["Average daily cases per 100,000 people"] = (((df["Cases in the past week"] / df["pop_denominator"]) * 100000) / 7).round()
 df["Zip Code"] = df["modified_zcta"]
 df["Neighborhood"] = df["neighborhood_name"].str.replace("/"," /<br>")
+df["Population"] = df["pop_denominator"].round()
 
 # %%
 df["Positivity Rate (%)"].hist()
 
 # %%
-df["Cases per 100,000 people"].hist()
+df["Average daily cases per 100,000 people"].hist()
 
 # %%
 fig = px.choropleth_mapbox(df,
@@ -45,7 +46,7 @@ fig = px.choropleth_mapbox(df,
                            locations="Zip Code",
                            featureidkey="properties.MODZCTA",
                            color="Positivity Rate (%)",
-                           color_continuous_scale="viridis",
+                           color_continuous_scale="Portland",
                            mapbox_style="carto-positron",
                            zoom=9, 
                            center={"lat": 40.7, "lon": -73.9},
@@ -54,10 +55,13 @@ fig = px.choropleth_mapbox(df,
                            hover_data={
                                "Cases in the past week", 
                                "Tests in the past week",
-                               "Cases per 100,000 people"},
-                           width=1000, height=800
+                               "Average daily cases per 100,000 poeple",
+                               "Population"},
+                           width=900, height=700
                            )
 # %%
+fig.update_layout(margin=dict(l=20, r=20, t=20, b=20))
 config = {'displaylogo': False}
 fig.write_html("nyc-positivity.html", config=config)
+
 # %%
