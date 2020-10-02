@@ -8,7 +8,7 @@ import plotly.express as px
 
 # %%
 this_week = pd.read_csv("data-by-modzcta.csv")
-last_week = pd.read_csv("data-by-modzcta-last-week.csv")
+last_week = pd.read_csv("data-by-modzcta-7-days-ago.csv")
 this_week.columns = [c.lower() for c in this_week.columns]
 last_week.columns = [c.lower() for c in last_week.columns]
 
@@ -55,7 +55,7 @@ fig = px.choropleth_mapbox(df,
                            hover_data={
                                "Cases in the past week", 
                                "Tests in the past week",
-                               "Average daily cases per 100,000 poeple",
+                               "Average daily cases per 100,000 people",
                                "Population"},
                            width=900, height=700
                            )
