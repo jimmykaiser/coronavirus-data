@@ -4,3 +4,4 @@ deaths/README.md
 .vscode
 data-by-modzcta-*
 .DS_Store
+__pycache__
