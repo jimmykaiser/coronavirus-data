@@ -1,4 +1,6 @@
-
+---
+layout: home
+---
 
 ## Citywide Positivity Rate in the Past Week
 

@@ -1,1 +1,12 @@
+markdown: kramdown
+
 title: Covid-19 in New York City
+
+exclude:
+  - README.md
+  - .gitignore
+  - Gemfile
+  - Gemfile.lock
+  - .sass-cache
+  - CNAME
+  - LICENSE
