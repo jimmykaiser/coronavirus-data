@@ -7,6 +7,18 @@ from matplotlib import pyplot as plt
 import plotly.express as px
 
 nycmap = json.load(open("Geography-resources/MODZCTA_2010_WGS1984.geo.json"))
+index_file = "index.md"
+
+# %% Citywide data
+citywide = pd.read_csv("tests.csv")
+citywide.columns = [c.lower() for c in citywide.columns]
+citywide = citywide.tail(1).reset_index(drop=True)
+for c in ["total_tests", "positive_tests", "total_tests_7days_avg", "positive_tests_7days_avg"]: 
+    citywide[c] = citywide[c].astype(int).apply(lambda x : "{:,}".format(x))
+citywide["percent_positive_7days_avg"] = (citywide["percent_positive_7days_avg"] * 100).round(1)
+citywide["percent_positive"] = (citywide["percent_positive"] * 100).round(1)
+citywide = citywide.iloc[0]
+print(citywide)
 
 # %% Import files
 def import_file(date_wanted):
@@ -57,7 +69,7 @@ fig = px.choropleth_mapbox(df,
                            color_continuous_scale="Portland",
                            mapbox_style="carto-positron",
                            zoom=9, 
-                           center={"lat": 40.7, "lon": -73.9},
+                           center={"lat": 40.7, "lon": -74},
                            opacity=0.7,
                            hover_name="Neighborhood", 
                            hover_data={
@@ -68,7 +80,7 @@ fig = px.choropleth_mapbox(df,
                                 "Average daily cases per 100,000 people",
                                 "Last week's positivity rate (%)", 
                                },
-                           width=900, height=700
+                           width=700, height=600
                            )
 
 # %%
@@ -77,5 +89,22 @@ fig = px.choropleth_mapbox(df,
 fig.update_layout(margin=dict(l=20, r=20, t=20, b=20))
 config = {'displaylogo': False}
 fig.write_html("nyc-positivity.html", config=config)
+
+# %% Update markdown file
+
+md_str = f"""## Positivity Rate in the Past Week by Neighborhood
+
+As of {citywide["date"]}, New York performed {citywide["total_tests_7days_avg"]} tests per day on average over the previous seven days, of which {citywide["positive_tests_7days_avg"]} were positive, an average positivity rate of {citywide["percent_positive_7days_avg"] * 100}%.
+
+{{% include_relative nyc-positivity.html%}}
+
+Map updated October 2, 2020
+
+Source: NYC Dept. of Health
+
+Repo: [https://github.com/jimmykaiser/coronavirus-data](https://github.com/jimmykaiser/coronavirus-data)"""
+
+with open(index_file, 'w') as f:
+    f.write(md_str)
 
 # %%
