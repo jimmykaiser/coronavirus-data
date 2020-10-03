@@ -1,3 +1,6 @@
+# Update this repo
+git fetch upstream
+git rebase -X theirs upstream/master
 # Get latest commit upstream
 TODAY=$(git log upstream/master --format=%ad --date=short -n 1 | tr ' ' '-')
 # Get hashes of relevant commits from upstream master
