@@ -98,7 +98,7 @@ md_str = f"""
 
 ## Citywide Positivity Rate in the Past Week
 
-As of {citywide["date"]}, New York performed {citywide["total_tests_7days_avg"]} tests per day on average over the previous seven days, of which {citywide["positive_tests_7days_avg"]} were positive, an average positivity rate of {citywide["percent_positive_7days_avg"]}%.
+As of {citywide["date"]}, New York performed an average of {citywide["total_tests_7days_avg"]} tests per day over the previous seven days. The city recorded {citywide["positive_tests_7days_avg"]} positive tests over the same period, a positivity rate of {citywide["percent_positive_7days_avg"]}%.
 
 ## Positivity Rate in the Past Week by Neighborhood
 
