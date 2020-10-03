@@ -3,10 +3,6 @@
 
 @import "{{ site.theme }}";
 
-.inner {
-  max-width: 100%;
-}
-
-.container-lg {
-  max-width: 90%;
+.container-md {
+  width: 900px;
 }
