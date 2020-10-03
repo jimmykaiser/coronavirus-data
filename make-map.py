@@ -1,5 +1,6 @@
 # %% 
 import json
+from datetime import datetime
 
 import numpy as np
 import pandas as pd
@@ -17,6 +18,7 @@ for c in ["total_tests", "positive_tests", "total_tests_7days_avg", "positive_te
     citywide[c] = citywide[c].astype(int).apply(lambda x : "{:,}".format(x))
 citywide["percent_positive_7days_avg"] = (citywide["percent_positive_7days_avg"] * 100).round(1)
 citywide["percent_positive"] = (citywide["percent_positive"] * 100).round(1)
+citywide["date"] = citywide["date"].map(lambda x: datetime.strptime(x, '%m/%d/%Y').strftime('%B %d, %Y'))
 citywide = citywide.iloc[0]
 print(citywide)
 
@@ -92,9 +94,13 @@ fig.write_html("nyc-positivity.html", config=config)
 
 # %% Update markdown file
 
-md_str = f"""## Positivity Rate in the Past Week by Neighborhood
+md_str = f"""
 
-As of {citywide["date"]}, New York performed {citywide["total_tests_7days_avg"]} tests per day on average over the previous seven days, of which {citywide["positive_tests_7days_avg"]} were positive, an average positivity rate of {citywide["percent_positive_7days_avg"] * 100}%.
+## Citywide Positivity Rate in the Past Week
+
+As of {citywide["date"]}, New York performed {citywide["total_tests_7days_avg"]} tests per day on average over the previous seven days, of which {citywide["positive_tests_7days_avg"]} were positive, an average positivity rate of {citywide["percent_positive_7days_avg"]}%.
+
+## Positivity Rate in the Past Week by Neighborhood
 
 {{% include_relative nyc-positivity.html%}}
 

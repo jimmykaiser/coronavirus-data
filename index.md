@@ -1,6 +1,10 @@
-## Positivity Rate in the Past Week by Neighborhood
 
-As of 09/29/2020, New York performed 29,272 tests per day on average over the previous seven days, of which 441 were positive, an average positivity rate of 150.0%.
+
+## Citywide Positivity Rate in the Past Week
+
+As of September 29, 2020, New York performed 29,272 tests per day on average over the previous seven days, of which 441 were positive, an average positivity rate of 1.5%.
+
+## Positivity Rate in the Past Week by Neighborhood
 
 {% include_relative nyc-positivity.html%}
 
