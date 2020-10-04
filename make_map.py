@@ -13,7 +13,7 @@ index_file = "index.md"
 citywide_file = "tests.csv"
 map_name = "nyc-positivity.html"
 
-def get_citywide_data(citywide_file)
+def get_citywide_data(citywide_file):
     """ Get latest citywide tests data and format it """
     citywide = pd.read_csv(citywide_file)
     citywide.columns = [c.lower() for c in citywide.columns]
@@ -145,9 +145,9 @@ def update_md_file(citywide, latest_date, index_file):
 
     return md_str
 
-if __name__ == "__main__":
-    latest_date = sys.argv[1]
-    citywide = get_citywide_file(citywide_file)
+def make_new_map(latest_date):
+    """ Make new map of New York neighborhoods """
+    citywide = get_citywide_data(citywide_file)
     this_week = import_file("today")
     last_week = import_file("last-week")
     two_weeks_ago = import_file("two-weeks-ago")
@@ -155,3 +155,8 @@ if __name__ == "__main__":
     df = prep_stats(df)
     produce_map(df, nycmap, map_name)
     update_md_file(citywide, latest_date, index_file)
+    return
+
+if __name__ == "__main__":
+    latest_date = sys.argv[1]
+    make_new_map(latest_date)
