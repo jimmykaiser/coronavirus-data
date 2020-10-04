@@ -123,22 +123,24 @@ def update_md_file(citywide, latest_date, index_file):
     latest_date_long = datetime.strptime(latest_date, '%Y-%m-%d').strftime('%B %d, %Y')
 
     md_str = f"""
+---
+layout: default
+---
 
-    Last updated {latest_date_long}
+Last updated {latest_date_long}
 
-    ## Citywide Positivity Rate in the Past Week
+## Citywide Positivity Rate in the Past Week
 
-    As of {citywide["date"]}, New York performed an average of {citywide["total_tests_7days_avg"]} tests per day over the previous seven days. The city recorded {citywide["positive_tests_7days_avg"]} positive tests over the same period, a positivity rate of {citywide["percent_positive_7days_avg"]}%.
+As of {citywide["date"]}, New York performed an average of {citywide["total_tests_7days_avg"]} tests per day over the previous seven days. The city recorded {citywide["positive_tests_7days_avg"]} positive tests over the same period, a positivity rate of {citywide["percent_positive_7days_avg"]}%.
 
-    ## Positivity Rate in the Past Week by Neighborhood
+## Positivity Rate in the Past Week by Neighborhood
 
-    {{% include_relative nyc-positivity.html%}}
+{{% include_relative nyc-positivity.html%}}
 
-    Map data as of {latest_date_long}
+Source: NYC Dept. of Health
 
-    Source: NYC Dept. of Health
-
-    Repo: [https://github.com/jimmykaiser/coronavirus-data](https://github.com/jimmykaiser/coronavirus-data)"""
+Repo: [https://github.com/jimmykaiser/coronavirus-data](https://github.com/jimmykaiser/coronavirus-data)
+    """
 
     with open(index_file, 'w') as f:
         f.write(md_str)
