@@ -96,7 +96,7 @@ def produce_map(df, nycmap, map_name):
         color_continuous_scale="Portland",
         mapbox_style="carto-positron",
         zoom=9, 
-        center={"lat": 40.7, "lon": -74},
+        center={"lat": 40.7, "lon": -73.98},
         opacity=0.7,
         hover_name="Neighborhood", 
         hover_data={
