@@ -19,3 +19,5 @@ echo "Got data as of $WEEK_AGO"
 git cat-file -p $two_week_hash:data-by-modzcta.csv > "data-by-modzcta-two-weeks-ago.csv"
 TWO_WEEKS=$(git log $two_week_hash --format=%ad --date=short -n 1 | tr ' ' '-')
 echo "Got data as of $TWO_WEEKS"
+# Make new version of map
+python make_map.py $TODAY
