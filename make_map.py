@@ -107,7 +107,7 @@ def produce_map(df, nycmap, map_name):
                 "Average daily cases per 100,000 people",
                 "Last week's positivity rate (%)", 
             },
-        width=600, height=600
+        width=600, height=500
     )
     fig.update_layout(margin=dict(l=20, r=20, t=20, b=20))
     config = {'displaylogo': False}
