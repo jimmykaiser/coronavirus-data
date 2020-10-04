@@ -1,5 +1,5 @@
 ---
-layout: home
+layout: default
 ---
 
 ## Citywide Positivity Rate in the Past Week

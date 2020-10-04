@@ -10,3 +10,8 @@ exclude:
   - .sass-cache
   - CNAME
   - LICENSE
+  - boro
+  - deaths
+  - Geography-resources
+  - recent
+  - testing
