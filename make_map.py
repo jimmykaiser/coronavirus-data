@@ -123,10 +123,6 @@ def update_md_file(citywide, latest_date, index_file):
     latest_date_long = datetime.strptime(latest_date, '%Y-%m-%d').strftime('%B %d, %Y')
 
     md_str = f"""
----
-layout: default
----
-
 Last updated {latest_date_long}
 
 ## Citywide Positivity Rate in the Past Week

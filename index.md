@@ -1,8 +1,4 @@
 
----
-layout: default
----
-
 Last updated October 04, 2020
 
 ## Citywide Positivity Rate in the Past Week
