@@ -153,8 +153,9 @@ def make_new_map(latest_date):
     two_weeks_ago = import_file("two-weeks-ago")
     df = merge_data(this_week, last_week, two_weeks_ago)
     df = prep_stats(df)
-    produce_map(df, nycmap, map_name)
-    update_md_file(citywide, latest_date, index_file)
+    fig = produce_map(df, nycmap, map_name)
+    md_str = update_md_file(citywide, latest_date, index_file)
+    print(md_str)
     return
 
 if __name__ == "__main__":
