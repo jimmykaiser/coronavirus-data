@@ -123,7 +123,7 @@ def update_md_file(citywide, latest_date, index_file):
     latest_date_long = datetime.strptime(latest_date, '%Y-%m-%d').strftime('%B %-d, %Y')
 
     md_str = f"""
-## Positivity rate over the past week by neighborhood
+# Positivity rate over the past week by neighborhood
 
 This map displays Covid-19 test positivity rate over the last seven days for each New York City zip code. 
 
