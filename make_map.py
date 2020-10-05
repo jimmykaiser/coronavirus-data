@@ -63,14 +63,14 @@ def prep_stats(df):
     # some places where total cases were higher past week than this week...
     df["Cases in the past week"] = df["Cases in the past week"].clip(0, None)
     df["Tests in the past week"] = df["total_covid_tests"] - df["total_covid_tests_last_week"]
-    df["Positivity Rate (%)"] = ((df["Cases in the past week"] / df["Tests in the past week"]) * 100).round(2)
+    df["Positivity Rate (%)"] = ((df["Cases in the past week"] / df["Tests in the past week"]) * 100).round(1)
     df["Average daily cases per 100,000 people"] = (((df["Cases in the past week"] / df["pop_denominator"]) * 100000) / 7).round()
 
     # %% Stats over week before last - 7 days ago to 14 days ago
     df["Cases in the week before last"] = df["covid_case_count_last_week"] - df["covid_case_count_two_weeks_ago"]
     df["Cases in the week before last"] = df["Cases in the week before last"].clip(0, None)
     df["Tests in the week before last"] = df["total_covid_tests_last_week"] - df["total_covid_tests_two_weeks_ago"]
-    df["Last week's positivity rate (%)"] = ((df["Cases in the week before last"] / df["Tests in the week before last"]) * 100).round(2)
+    df["Last week's positivity rate (%)"] = ((df["Cases in the week before last"] / df["Tests in the week before last"]) * 100).round(1)
     df["Last week's cases per 100,000 people"] = (((df["Cases in the week before last"] / df["pop_denominator"]) * 100000) / 7).round()
 
     return df
