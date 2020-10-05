@@ -22,7 +22,7 @@ def get_citywide_data(citywide_file):
         citywide[c] = citywide[c].astype(int).apply(lambda x : "{:,}".format(x))
     citywide["percent_positive_7days_avg"] = (citywide["percent_positive_7days_avg"] * 100).round(1)
     citywide["percent_positive"] = (citywide["percent_positive"] * 100).round(1)
-    citywide["date"] = citywide["date"].map(lambda x: datetime.strptime(x, '%m/%d/%Y').strftime('%B %d, %Y'))
+    citywide["date"] = citywide["date"].map(lambda x: datetime.strptime(x, '%m/%d/%Y').strftime('%B %-d, %Y'))
     citywide = citywide.iloc[0]
     print(citywide)
     return citywide
@@ -84,7 +84,7 @@ def produce_map(df, nycmap, map_name):
     # Formatting
     df["Zip Code"] = df["modified_zcta"]
     df["Neighborhood"] = df["neighborhood_name"].str.replace("/"," /<br>")
-    df["Population"] = df["pop_denominator"].round()
+    df["Population"] = df["pop_denominator"].round().apply(lambda x : "{:,}".format(x))
 
     # Make map
     fig = px.choropleth_mapbox(
@@ -120,23 +120,28 @@ def update_md_file(citywide, latest_date, index_file):
     Write to file.
     """
 
-    latest_date_long = datetime.strptime(latest_date, '%Y-%m-%d').strftime('%B %d, %Y')
+    latest_date_long = datetime.strptime(latest_date, '%Y-%m-%d').strftime('%B %-d, %Y')
 
     md_str = f"""
-Last updated {latest_date_long}
+## Positivity rate over the past week by neighborhood
 
-## Citywide Positivity Rate in the Past Week
+This map displays Covid-19 test positivity rate over the last seven days for each New York City zip code. 
 
-As of {citywide["date"]}, New York performed an average of {citywide["total_tests_7days_avg"]} tests per day over the previous seven days. The city recorded {citywide["positive_tests_7days_avg"]} positive tests over the same period, a positivity rate of {citywide["percent_positive_7days_avg"]}%.
-
-## Positivity Rate in the Past Week by Neighborhood
+While it is possible to view cumulative test positivity by zip code since March on the NYC Dept. of Health's [data page](https://www1.nyc.gov/site/doh/covid/covid-19-data.page), this map shows changes in the past week so recent trends are evident. 
 
 {{% include_relative nyc-positivity.html%}}
 
-Source: NYC Dept. of Health
+Map last updated {latest_date_long}
 
+### Citywide numbers as of {citywide["date"]}
+
+New York is averaging {citywide["total_tests_7days_avg"]} tests and {citywide["positive_tests_7days_avg"]} new cases per day over the past week. 
+
+{citywide["percent_positive_7days_avg"]}% of tests came back positive in the last seven days. 
+
+Source: NYC Dept. of Health  
 Repo: [https://github.com/jimmykaiser/coronavirus-data](https://github.com/jimmykaiser/coronavirus-data)
-    """
+"""
 
     with open(index_file, 'w') as f:
         f.write(md_str)
