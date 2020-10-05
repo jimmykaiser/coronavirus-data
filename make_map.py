@@ -67,11 +67,11 @@ def prep_stats(df):
     df["case_rate_past_week"] = (((df["cases_past_week"] / df["pop_denominator"]) * 100000) / 7).round()
 
     # %% Stats over week before last - 7 days ago to 14 days ago
-    df["Cases in the week before last"] = df["covid_case_count_last_week"] - df["covid_case_count_two_weeks_ago"]
-    df["Cases in the week before last"] = df["Cases in the week before last"].clip(0, None)
-    df["Tests in the week before last"] = df["total_covid_tests_last_week"] - df["total_covid_tests_two_weeks_ago"]
-    df["positivity_rate_week_before_last"] = ((df["Cases in the week before last"] / df["Tests in the week before last"]) * 100).round(1)
-    df["case_rate_week_before_last"] = (((df["Cases in the week before last"] / df["pop_denominator"]) * 100000) / 7).round()
+    df["cases_week_before_last"] = df["covid_case_count_last_week"] - df["covid_case_count_two_weeks_ago"]
+    df["cases_week_before_last"] = df["cases_week_before_last"].clip(0, None)
+    df["tests_week_before_last"] = df["total_covid_tests_last_week"] - df["total_covid_tests_two_weeks_ago"]
+    df["positivity_rate_week_before_last"] = ((df["cases_week_before_last"] / df["tests_week_before_last"]) * 100).round(1)
+    df["case_rate_week_before_last"] = (((df["cases_week_before_last"] / df["pop_denominator"]) * 100000) / 7).round()
 
     return df
 
@@ -85,6 +85,7 @@ def produce_map(df, nycmap, map_name):
     df["Positivity Rate (%)"] = df["positivity_rate_past_week"]
     df["neighborhood"] = df["neighborhood_name"].str.replace("/"," /<br>")
     df["population"] = df["pop_denominator"].round().astype(int).apply(lambda x : "{:,}".format(x))
+    df["tests_past_week"] = df["tests_past_week"].round().astype(int).apply(lambda x : "{:,}".format(x))
 
     # Make map
     fig = px.choropleth_mapbox(
