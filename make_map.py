@@ -84,7 +84,7 @@ def produce_map(df, nycmap, map_name):
     # Formatting
     df["Zip Code"] = df["modified_zcta"]
     df["Neighborhood"] = df["neighborhood_name"].str.replace("/"," /<br>")
-    df["Population"] = df["pop_denominator"].round().apply(lambda x : "{:,}".format(x))
+    df["Population"] = df["pop_denominator"].round().astype(int).apply(lambda x : "{:,}".format(x))
 
     # Make map
     fig = px.choropleth_mapbox(
