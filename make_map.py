@@ -59,19 +59,19 @@ def prep_stats(df):
     """
     df = df.copy(deep=True)
     # %% Stats over the past week - today to 7 days ago
-    df["Cases in the past week"] = df["covid_case_count"] - df["covid_case_count_last_week"]
+    df["cases_past_week"] = df["covid_case_count"] - df["covid_case_count_last_week"]
     # some places where total cases were higher past week than this week...
-    df["Cases in the past week"] = df["Cases in the past week"].clip(0, None)
-    df["Tests in the past week"] = df["total_covid_tests"] - df["total_covid_tests_last_week"]
-    df["Positivity Rate (%)"] = ((df["Cases in the past week"] / df["Tests in the past week"]) * 100).round(1)
-    df["Average daily cases per 100,000 people"] = (((df["Cases in the past week"] / df["pop_denominator"]) * 100000) / 7).round()
+    df["cases_past_week"] = df["cases_past_week"].clip(0, None)
+    df["tests_past_week"] = df["total_covid_tests"] - df["total_covid_tests_last_week"]
+    df["positivity_rate_past_week"] = ((df["cases_past_week"] / df["tests_past_week"]) * 100).round(1)
+    df["case_rate_past_week"] = (((df["cases_past_week"] / df["pop_denominator"]) * 100000) / 7).round()
 
     # %% Stats over week before last - 7 days ago to 14 days ago
     df["Cases in the week before last"] = df["covid_case_count_last_week"] - df["covid_case_count_two_weeks_ago"]
     df["Cases in the week before last"] = df["Cases in the week before last"].clip(0, None)
     df["Tests in the week before last"] = df["total_covid_tests_last_week"] - df["total_covid_tests_two_weeks_ago"]
-    df["Last week's positivity rate (%)"] = ((df["Cases in the week before last"] / df["Tests in the week before last"]) * 100).round(1)
-    df["Last week's cases per 100,000 people"] = (((df["Cases in the week before last"] / df["pop_denominator"]) * 100000) / 7).round()
+    df["positivity_rate_week_before_last"] = ((df["Cases in the week before last"] / df["Tests in the week before last"]) * 100).round(1)
+    df["case_rate_week_before_last"] = (((df["Cases in the week before last"] / df["pop_denominator"]) * 100000) / 7).round()
 
     return df
 
@@ -82,15 +82,15 @@ def produce_map(df, nycmap, map_name):
     Save to file
     """
     # Formatting
-    df["Zip Code"] = df["modified_zcta"]
-    df["Neighborhood"] = df["neighborhood_name"].str.replace("/"," /<br>")
-    df["Population"] = df["pop_denominator"].round().astype(int).apply(lambda x : "{:,}".format(x))
+    df["Positivity Rate (%)"] = df["positivity_rate_past_week"]
+    df["neighborhood"] = df["neighborhood_name"].str.replace("/"," /<br>")
+    df["population"] = df["pop_denominator"].round().astype(int).apply(lambda x : "{:,}".format(x))
 
     # Make map
     fig = px.choropleth_mapbox(
         df,
         geojson=nycmap,
-        locations="Zip Code",
+        locations="modified_zcta",
         featureidkey="properties.MODZCTA",
         color="Positivity Rate (%)",
         color_continuous_scale="Portland",
@@ -98,18 +98,31 @@ def produce_map(df, nycmap, map_name):
         zoom=9, 
         center={"lat": 40.7, "lon": -73.98},
         opacity=0.7,
-        hover_name="Neighborhood", 
-        hover_data={
-                "Population", 
-                "Cases in the past week", 
-                "Tests in the past week",
-                "Last week's cases per 100,000 people", 
-                "Average daily cases per 100,000 people",
-                "Last week's positivity rate (%)", 
-            },
+        custom_data=[
+                "neighborhood", 
+                "population", 
+                "cases_past_week", 
+                "tests_past_week",
+                "positivity_rate_week_before_last", 
+                "case_rate_past_week",
+                "case_rate_week_before_last",  
+        ],
         width=600, height=500
     )
     fig.update_layout(margin=dict(l=20, r=20, t=20, b=20))
+    fig.update_traces(
+        hovertemplate="<br>".join([
+            "<b>%{customdata[0]}</b>",
+            "Zip code: %{location}",
+            "Population: %{customdata[1]}",
+            "Cases in the past week: %{customdata[2]}",
+            "Tests in the past week: %{customdata[3]}",
+            "Postivity rate (%)<br>    This week: %{z}",
+            "    Last week: %{customdata[4]}",
+            "Average daily cases per 100,000 people<br>    This week: %{customdata[5]}",
+            "    Last week: %{customdata[6]}",
+        ])
+    )
     config = {'displaylogo': False}
     fig.write_html(map_name, config=config)
     return fig
