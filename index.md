@@ -1,5 +1,5 @@
 
-# Positivity rate over the past week by neighborhood
+## Positivity rate over the past week by neighborhood
 
 This map displays Covid-19 test positivity rate over the last seven days for each New York City zip code. 
 
