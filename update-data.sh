@@ -1,6 +1,6 @@
 # Update this repo
 git fetch upstream
-git rebase -X theirs upstream/master --quiet
+git rebase -X theirs upstream/master > rebase_log.txt
 # Get latest commit upstream
 TODAY=$(git log upstream/master --format=%ad --date=short -n 1 | tr ' ' '-')
 echo "Latest commit is $TODAY"
