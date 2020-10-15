@@ -43,6 +43,8 @@ def merge_data(this_week, last_week, two_weeks_ago):
     """
     # Check positivity rate calculation
     this_week["positive_check"] = ((this_week["covid_case_count"] / this_week["total_covid_tests"])* 100).round(2)
+    # Remove 11096 which is missing name, population, and rates
+    this_week = this_week[this_week.modified_zcta != 11096]
     assert len(this_week[this_week.positive_check != this_week.percent_positive]) == 0
     # Merge data sets
     id_cols = ["modified_zcta", "neighborhood_name", "borough_group", "pop_denominator"]
@@ -175,6 +177,9 @@ def make_new_map(latest_date):
     print(md_str)
     return
 
-if __name__ == "__main__":
-    latest_date = sys.argv[1]
-    make_new_map(latest_date)
+# if __name__ == "__main__":
+#     latest_date = sys.argv[1]
+#     make_new_map(latest_date)
+
+latest_date = "2020-10-14"
+make_new_map(latest_date)
