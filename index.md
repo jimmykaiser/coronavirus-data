@@ -7,11 +7,11 @@ While it is possible to view cumulative positivity rates by zip code since March
 
 {% include_relative nyc-positivity.html%}
 
-Map last updated October 13, 2020
+Map last updated October 14, 2020
 
-### Citywide numbers as of October 10, 2020
+### Citywide numbers as of October 11, 2020
 
-New York is averaging 36,051 tests and 553 new cases per day over the past week. 
+New York is averaging 37,240 tests and 568 new cases per day over the past week. 
 
 Over the past seven days, 1.5 percent of tests were positive. 
 
