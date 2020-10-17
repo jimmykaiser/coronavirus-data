@@ -177,9 +177,6 @@ def make_new_map(latest_date):
     print(md_str)
     return
 
-# if __name__ == "__main__":
-#     latest_date = sys.argv[1]
-#     make_new_map(latest_date)
-
-latest_date = "2020-10-14"
-make_new_map(latest_date)
+if __name__ == "__main__":
+    latest_date = sys.argv[1]
+    make_new_map(latest_date)
