@@ -7,7 +7,7 @@ While it is possible to view cumulative positivity rates by zip code since March
 
 {% include_relative nyc-positivity.html%}
 
-Map last updated October 14, 2020
+Map last updated October 16, 2020
 
 ### Citywide numbers as of October 13, 2020
 
