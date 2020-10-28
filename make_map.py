@@ -96,6 +96,7 @@ def produce_map(df, nycmap, map_name):
         locations="modified_zcta",
         featureidkey="properties.MODZCTA",
         color="Positivity Rate (%)",
+        range_color=[0, 15],
         color_continuous_scale="Portland",
         mapbox_style="carto-positron",
         zoom=9, 
