@@ -15,7 +15,7 @@ New York is averaging 34,324 tests and 624 new cases per day over the past week.
 
 Over the past seven days, 1.8 percent of tests were positive. 
 
-In the week ending October 19, 2020, 665 out of 38,728 tests were positive, a rate of 1.7 percent. 
+In the week ending October 19, 2020, 665 out of 38,728 tests per day were positive, a rate of 1.7 percent. 
 
 Source: NYC Dept. of Health  
 Repo: [https://github.com/jimmykaiser/coronavirus-data](https://github.com/jimmykaiser/coronavirus-data)
