@@ -13,17 +13,20 @@ index_file = "index.md"
 citywide_file = "tests.csv"
 map_name = "nyc-positivity.html"
 
-def get_citywide_data(citywide_file):
-    """ Get latest citywide tests data and format it """
+def get_citywide_data(citywide_file, days_ago):
+    """ 
+    Get citywide tests data from date `days ago` days ago and format it
+    """
     citywide = pd.read_csv(citywide_file)
     citywide.columns = [c.lower() for c in citywide.columns]
-    citywide = citywide.tail(1).reset_index(drop=True)
+    citywide = citywide.tail(20).reset_index(drop=True)
     for c in ["total_tests", "positive_tests", "total_tests_7days_avg", "positive_tests_7days_avg"]: 
         citywide[c] = citywide[c].astype(int).apply(lambda x : "{:,}".format(x))
     citywide["percent_positive_7days_avg"] = (citywide["percent_positive_7days_avg"] * 100).round(1)
     citywide["percent_positive"] = (citywide["percent_positive"] * 100).round(1)
     citywide["date"] = citywide["date"].map(lambda x: datetime.strptime(x, '%m/%d/%Y').strftime('%B %-d, %Y'))
-    citywide = citywide.iloc[0]
+    days_ago = (days_ago + 1) * -1
+    citywide = citywide.iloc[days_ago]
     print(citywide)
     return citywide
 
@@ -131,7 +134,7 @@ def produce_map(df, nycmap, map_name):
     fig.write_html(map_name, config=config)
     return fig
 
-def update_md_file(citywide, latest_date, index_file):
+def update_md_file(citywide, citywide_last_week,latest_date, index_file):
     """
     Update main page of website with new information.
     Write to file.
@@ -156,6 +159,8 @@ New York is averaging {citywide["total_tests_7days_avg"]} tests and {citywide["p
 
 Over the past seven days, {citywide["percent_positive_7days_avg"]} percent of tests were positive. 
 
+In the week ending {citywide_last_week["date"]}, {citywide_last_week["positive_tests_7days_avg"]} out of {citywide_last_week["total_tests_7days_avg"]} tests per day were positive, a rate of {citywide_last_week["percent_positive_7days_avg"]} percent. 
+
 Source: NYC Dept. of Health  
 Repo: [https://github.com/jimmykaiser/coronavirus-data](https://github.com/jimmykaiser/coronavirus-data)
 """
@@ -167,17 +172,19 @@ Repo: [https://github.com/jimmykaiser/coronavirus-data](https://github.com/jimmy
 
 def make_new_map(latest_date):
     """ Make new map of New York neighborhoods """
-    citywide = get_citywide_data(citywide_file)
+    citywide = get_citywide_data(citywide_file, 0)
+    citywide_last_week = get_citywide_data(citywide_file, 7)
     this_week = import_file("today")
     last_week = import_file("last-week")
     two_weeks_ago = import_file("two-weeks-ago")
     df = merge_data(this_week, last_week, two_weeks_ago)
     df = prep_stats(df)
     fig = produce_map(df, nycmap, map_name)
-    md_str = update_md_file(citywide, latest_date, index_file)
+    md_str = update_md_file(citywide, citywide_last_week, latest_date, index_file)
     print(md_str)
     return
 
 if __name__ == "__main__":
     latest_date = sys.argv[1]
+    # latest_date = "2020-10-29"
     make_new_map(latest_date)
