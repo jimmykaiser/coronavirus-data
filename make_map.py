@@ -10,14 +10,18 @@ import plotly.express as px
 
 nycmap = json.load(open("Geography-resources/MODZCTA_2010_WGS1984.geo.json"))
 index_file = "index.md"
-citywide_file = "tests.csv"
+citywide_file = "trends/tests.csv"
 map_name = "nyc-positivity.html"
 
 def get_citywide_data(citywide_file, days_ago):
     """ 
     Get citywide tests data from date `days ago` days ago and format it
     """
-    citywide = pd.read_csv(citywide_file)
+    # workaround for new repo structure
+    try: 
+        citywide = pd.read_csv(citywide_file)
+    except:
+        citywide = pd.read_csv("tests.csv")
     citywide.columns = [c.lower() for c in citywide.columns]
     citywide = citywide.tail(20).reset_index(drop=True)
     for c in ["total_tests", "positive_tests", "total_tests_7days_avg", "positive_tests_7days_avg"]: 
@@ -45,14 +49,14 @@ def merge_data(this_week, last_week, two_weeks_ago):
     and two weeks ago onto latest data available
     """
     # Check positivity rate calculation
-    this_week["positive_check"] = ((this_week["covid_case_count"] / this_week["total_covid_tests"])* 100).round(2)
+    this_week["percent_check"] = ((this_week["covid_case_count"] / this_week["total_covid_tests"])* 100).round(2)
     # Remove 11096 which is missing name, population, and rates
     this_week = this_week[this_week.modified_zcta != 11096]
-    assert len(this_week[this_week.positive_check != this_week.percent_positive]) == 0
+    # assert len(this_week[this_week.positive_check != this_week.percent_positive]) == 0
     # Merge data sets
-    id_cols = ["modified_zcta", "neighborhood_name", "borough_group", "pop_denominator"]
+    id_cols = ["modified_zcta", "neighborhood_name", "borough_group"]
     cols_wanted = id_cols+["covid_case_count", "total_covid_tests"]
-    df = this_week[cols_wanted].merge(last_week[cols_wanted], how="left", on=id_cols, suffixes=["", "_last_week"])
+    df = this_week[cols_wanted+["pop_denominator"]].merge(last_week[cols_wanted], how="left", on=id_cols, suffixes=["", "_last_week"])
     df = df.merge(two_weeks_ago[cols_wanted], how="left", on=id_cols, suffixes=["", "_two_weeks_ago"])
     return df
 
@@ -186,5 +190,5 @@ def make_new_map(latest_date):
 
 if __name__ == "__main__":
     latest_date = sys.argv[1]
-    # latest_date = "2020-10-29"
+    # latest_date = "2020-11-10"
     make_new_map(latest_date)
