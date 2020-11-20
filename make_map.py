@@ -178,6 +178,6 @@ def make_new_map(latest_date):
     return
 
 if __name__ == "__main__":
-    # latest_date = sys.argv[1]
-    latest_date = "2020-11-19"
+    latest_date = sys.argv[1]
+    # latest_date = "2020-11-19"
     make_new_map(latest_date)
